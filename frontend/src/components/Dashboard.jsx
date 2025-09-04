@@ -3,9 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import FileUpload from './FileUpload';
 import UploadedFiles from './UploadedFiles';
 import { useNavigate } from 'react-router-dom';
+import './Dashboard.css';
 
 function Dashboard() {
-    const { user, logout } = useAuth(); // Get user from context
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [refreshFiles, setRefreshFiles] = useState(0);
 
@@ -20,17 +21,22 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                {/* Welcome message using the user's name */}
-                <h2>Welcome, {user ? user.username : 'User'}!</h2>
-                <button onClick={handleLogout} className="btn btn-danger">
-                    Logout
-                </button>
-            </div>
+            <div className="dashboard-content">
+                <div className="dashboard-header">
+                    <h2>Welcome, {user ? user.name : 'User'}</h2>
+                    <button onClick={handleLogout} className="logout-button">
+                        Logout
+                    </button>
+                </div>
 
-            <FileUpload onUploadSuccess={handleUploadSuccess} />
-            <hr className="separator" />
-            <UploadedFiles refreshTrigger={refreshFiles} />
+                <div className="glass-card">
+                    <FileUpload onUploadSuccess={handleUploadSuccess} />
+                </div>
+
+                <div className="glass-card">
+                    <UploadedFiles refreshTrigger={refreshFiles} />
+                </div>
+            </div>
         </div>
     );
 }

@@ -1,3 +1,5 @@
+// frontend-vite/src/components/UploadedFiles.jsx
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -5,49 +7,45 @@ import { useAuth } from '../context/AuthContext';
 function UploadedFiles({ refreshTrigger }) {
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
     const { token } = useAuth();
 
-    const fetchUploadedFiles = async () => {
-        setLoading(true);
-        setError('');
-        try {
-            const res = await axios.get('http://localhost:5000/api/upload', {
-                headers: {
-                    'x-auth-token': token,
-                },
-            });
-            // Sort files by upload date, newest first
-            const sortedFiles = res.data.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-            setFiles(sortedFiles);
-        } catch (err) {
-            console.error('Failed to fetch uploaded files:', err.response ? err.response.data : err.message);
-            setError('Failed to fetch uploaded files.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
+        const fetchUploadedFiles = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get('/api/upload', { headers: { 'x-auth-token': token } });
+                setFiles(res.data);
+            } catch (err) {
+                console.error('Failed to fetch uploaded files:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchUploadedFiles();
-    }, [token, refreshTrigger]); // Re-fetch when token changes or refreshTrigger updates
+    }, [token, refreshTrigger]);
 
-    if (loading) return <p className="text-center">Loading uploaded files... <span className="loading-spinner"></span></p>;
-    if (error) return <div className="alert alert-danger">{error}</div>;
+    if (loading) return <p style={{ textAlign: 'center' }}>Loading files...</p>;
 
     return (
-        <div className="uploaded-files-section">
-            <h3>Your Upload History</h3>
+        <div>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Your Upload History</h3>
             {files.length === 0 ? (
-                <p className="text-center">No files uploaded yet. Start by uploading one!</p>
+                <p style={{ textAlign: 'center', marginTop: '20px', opacity: 0.7 }}>
+                    No files uploaded yet.
+                </p>
             ) : (
-                <ul className="file-list">
+                <ul className="uploaded-files-list">
                     {files.map((file, index) => (
                         <li key={index}>
-                            <strong>{file.filename}</strong>
-                            <span>
-                                Uploaded on {new Date(file.uploadDate).toLocaleString()} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                            </span>
+                            <div className="file-info">
+                                <strong>{file.filename}</strong>
+                                <span className="file-meta">
+                                    Uploaded on {new Date(file.uploadDate).toLocaleString()}
+                                </span>
+                            </div>
+                            <div className="file-meta">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                            </div>
                         </li>
                     ))}
                 </ul>

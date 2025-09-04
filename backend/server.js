@@ -4,8 +4,6 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const uploadRoutes = require('./routes/upload');
 const adminRoutes = require('./routes/admin');
-// const multer = require('multer');
-// const upload = multer({ dest: 'uploads/' });
 
 const app = express();
 

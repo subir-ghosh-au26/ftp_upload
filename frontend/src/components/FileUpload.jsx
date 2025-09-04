@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -7,79 +7,68 @@ function FileUpload({ onUploadSuccess }) {
     const [message, setMessage] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const { token } = useAuth();
+    const fileInputRef = useRef(null); // Ref to clear the input
 
     const handleFileChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             setSelectedFile(event.target.files[0]);
             setMessage('');
-        } else {
-            setSelectedFile(null);
         }
     };
 
     const handleUpload = async () => {
         if (!selectedFile) {
-            setMessage({ type: 'danger', text: 'Please select a file first!' });
+            setMessage({ type: 'error', text: 'Please select a file first!' });
             return;
         }
-
         const formData = new FormData();
         formData.append('file', selectedFile);
-
         setIsUploading(true);
-        setMessage({ type: 'info', text: 'Uploading file...' });
+        setMessage('');
 
         try {
-            const res = await axios.post('http://localhost:5000/api/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'x-auth-token': token,
-                },
+            const res = await axios.post('/api/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data', 'x-auth-token': token },
             });
-            setMessage({ type: 'success', text: `File "${res.data.filename}" uploaded successfully!` });
-            setSelectedFile(null); // Clear selected file
-            document.getElementById('file-input').value = ''; // Clear file input visual
+            setMessage({ type: 'success', text: `Success: "${res.data.filename}" uploaded!` });
+            setSelectedFile(null);
+            fileInputRef.current.value = null; // Clear the file input
             if (onUploadSuccess) {
                 onUploadSuccess();
             }
         } catch (err) {
-            console.error('File upload failed:', err.response ? err.response.data : err.message);
-            setMessage({ type: 'danger', text: `Upload failed: ${err.response?.data?.msg || err.message}` });
+            setMessage({ type: 'error', text: `Upload failed: ${err.response?.data?.msg || err.message}` });
         } finally {
             setIsUploading(false);
         }
     };
 
     return (
-        <div className="file-upload-section">
-            <h3>Upload New File</h3>
-            <div className="form-group flex-group">
+        <div>
+            <div className="file-upload-section">
                 <input
                     type="file"
-                    id="file-input"
+                    id="file-upload-input"
+                    className="file-upload-input"
                     onChange={handleFileChange}
+                    ref={fileInputRef}
                     disabled={isUploading}
-                    aria-label="Choose file to upload"
                 />
+                <label htmlFor="file-upload-input" className="file-upload-label">
+                    {selectedFile ? selectedFile.name : 'Click to choose a file...'}
+                </label>
                 <button
                     onClick={handleUpload}
-                    className="btn"
+                    className="upload-button"
                     disabled={!selectedFile || isUploading}
                 >
-                    {isUploading ? (
-                        <>Uploading... <span className="loading-spinner"></span></>
-                    ) : (
-                        'Upload'
-                    )}
+                    {isUploading ? 'Uploading...' : 'Upload'}
                 </button>
             </div>
             {message.text && (
-                <div className={`alert alert-${message.type}`}>
+                <div className={`upload-message ${message.type}`}>
                     {message.text}
                 </div>
-            )}
-            {selectedFile && !isUploading && (
-                <p>Selected: <strong>{selectedFile.name}</strong> ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</p>
             )}
         </div>
     );

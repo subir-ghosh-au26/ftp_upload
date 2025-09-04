@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Flex, Heading, Text, Button, Spacer } from '@chakra-ui/react';
+import { Button, Spacer } from '@chakra-ui/react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Stats from './Stats';
 import FilesTable from './FilesTable';
+import FtpFileBrowser from './FtpFileBrowser';
+import './AdminDashboard.css';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -15,45 +17,29 @@ const AdminDashboard = () => {
     };
 
     return (
-        <Box p={{ base: 4, md: 8 }} bg="gray.50" minH="100vh">
-            <Flex direction="column" maxW="1200px" mx="auto">
-
-                {/* START: New Header Section */}
-                <Flex
-                    as="header"
-                    alignItems="center"
-                    mb={8}
-                    wrap="wrap"
-                    borderBottomWidth="1px"
-                    pb={4}
-                >
-                    <Box>
-                        <Heading as="h1" size="xl" color="brand.800">
-                            Admin Dashboard
-                        </Heading>
-                        <Text color="gray.600">
-                            Welcome, {user ? user.name : 'Admin'}!
-                        </Text>
-                    </Box>
+        <div className="admin-dashboard-container">
+            <div className="admin-dashboard-content">
+                <header className="admin-header">
+                    <div>
+                        <h1>Admin Dashboard</h1>
+                        <p>Welcome, {user ? user.name : 'Admin'}!</p>
+                    </div>
                     <Spacer />
                     <Button
-                        colorScheme="red"
+                        colorScheme="whiteAlpha"
                         variant="outline"
                         onClick={handleLogout}
-                        mt={{ base: 4, md: 0 }} // Add margin top on small screens
+                        _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
                     >
                         Logout
                     </Button>
-                </Flex>
-                {/* END: New Header Section */}
+                </header>
 
-                {/* Stats Cards and Charts */}
                 <Stats />
-
-                {/* All Files Table */}
+                <FtpFileBrowser />
                 <FilesTable />
-            </Flex>
-        </Box>
+            </div>
+        </div>
     );
 };
 
