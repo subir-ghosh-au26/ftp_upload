@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import Hyperspeed from './Hyperspeed';
+import Hyperspeed from './Effect/Hyperspeed';
 import './Login.css';
 import { AtSignIcon, LockIcon } from '@chakra-ui/icons';
+import ElectricBorder from './Effect/ElectricBorder';
+import SplashCursor from './Effect/SplashCursor';
 
 // --- Reusable Footer JSX ---
 const AppFooter = () => (
@@ -38,6 +40,7 @@ function Login() {
 
     return (
         <div className="login-container">
+            <SplashCursor />
             <Hyperspeed
                 effectOptions={{
                     onSpeedUp: () => { },
@@ -77,45 +80,47 @@ function Login() {
                     }
                 }}
             />
-            <div className="login-card">
-                <h1>Secure File Hub</h1>
-                <p>Enter your credentials to access your secure hub.</p>
+            <ElectricBorder>
+                <div className="login-card">
+                    <h1>Secure File Hub</h1>
+                    <p>Enter your credentials to access your secure hub.</p>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <AtSignIcon className="input-icon" />
-                        <input
-                            type="text"
-                            className="login-input"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <LockIcon className="input-icon" />
-                        <input
-                            type="password"
-                            className="login-input"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit" className="login-button" disabled={isLoading}>
-                        {isLoading ? 'Signing In...' : 'Sign In'}
-                    </button>
-                </form>
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <AtSignIcon className="input-icon" />
+                            <input
+                                type="text"
+                                className="login-input"
+                                placeholder="Username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="input-group">
+                            <LockIcon className="input-icon" />
+                            <input
+                                type="password"
+                                className="login-input"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="login-button" disabled={isLoading}>
+                            {isLoading ? 'Signing In...' : 'Sign In'}
+                        </button>
+                    </form>
 
-                {error && (
-                    <div className="error-message">
-                        {error}
-                    </div>
-                )}
+                    {error && (
+                        <div className="error-message">
+                            {error}
+                        </div>
+                    )}
 
-            </div>
+                </div>
+            </ElectricBorder>
             <AppFooter />
         </div>
     );
