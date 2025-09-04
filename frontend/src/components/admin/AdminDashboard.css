@@ -88,3 +88,27 @@
   color: rgba(255, 255, 255, 0.6);
   margin-top: 5px;
 }
+
+/* --- Footer Styles --- */
+.app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  padding: 15px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: rgba(43, 2, 2, 0.7);
+}
+
+.app-footer a {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.app-footer a:hover {
+  color: white;
+  text-decoration: underline;
+}

@@ -1,6 +1,5 @@
-/* Use the same stunning gradient background as the login page */
 .dashboard-container {
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   padding: 40px 20px;
   color: white;
@@ -24,8 +23,8 @@
 }
 
 .dashboard-content {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 0;
 }
 
 /* Glassmorphism Card Style */
@@ -171,4 +170,28 @@
 }
 .upload-message.error {
   background-color: rgba(231, 60, 126, 0.5); /* #e73c7e */
+}
+
+/* --- Footer Styles --- */
+.app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  padding: 15px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: rgba(43, 2, 2, 0.7);
+}
+
+.app-footer a {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.app-footer a:hover {
+  color: white;
+  text-decoration: underline;
 }
