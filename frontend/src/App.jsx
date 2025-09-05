@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, Spinner } from '@chakra-ui/react';
 import Login from './components/Login';
-// import NLogin from './components/NLogin';
-import Dashboard from './components/Dashboard';
-import AdminDashboard from './components/admin/AdminDashboard';
 import { useAuth } from './context/AuthContext';
 import './index.css';
+
+
+const Dashboard = React.lazy(() => import('./components/Dashboard'));
+const AdminDashboard = React.lazy(() => import('./components/admin/AdminDashboard'));
+
+// A simple loading fallback component for Suspense
+const LoadingFallback = () => (
+  <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bg="gray.800">
+    <Spinner size="xl" color="white" />
+  </Box>
+);
+
 
 const PrivateRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
@@ -36,6 +45,7 @@ function App() {
   const { user } = useAuth();
 
   return (
+    <Suspense fallback={<LoadingFallback />}>
     <Routes>
       <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
 
@@ -54,6 +64,7 @@ function App() {
       {/* Default redirect for logged-in users */}
       <Route path="*" element={<Navigate to={user?.role === 'admin' ? '/admin' : '/'} />} />
     </Routes>
+    </Suspense>
   );
 }
 
