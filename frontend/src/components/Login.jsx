@@ -4,7 +4,7 @@ import Hyperspeed from './Effect/Hyperspeed';
 import './Login.css';
 import { AtSignIcon, LockIcon } from '@chakra-ui/icons';
 import ElectricBorder from './Effect/ElectricBorder';
-import SplashCursor from './Effect/SplashCursor';
+
 
 // --- Reusable Footer JSX ---
 const AppFooter = () => (
@@ -40,7 +40,6 @@ function Login() {
 
     return (
         <div className="login-container">
-            <SplashCursor />
             <Hyperspeed
                 effectOptions={{
                     onSpeedUp: () => { },

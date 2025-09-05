@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, Spinner } from '@chakra-ui/react';
 import Login from './components/Login';
+// import NLogin from './components/NLogin';
 import Dashboard from './components/Dashboard';
 import AdminDashboard from './components/admin/AdminDashboard';
 import { useAuth } from './context/AuthContext';
